@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Shortener.Api.Infrastructure.Errors;
 
 namespace Shortener.Api.Features.Links.Create;
 
@@ -20,10 +21,7 @@ public static class CreateLinkEndpoint
 
             if (!result.IsSuccess)
             {
-                return Results.Problem(
-                    statusCode: StatusCodes.Status400BadRequest,
-                    title: "Pedido inválido",
-                    detail: result.Error);
+                return ApiErrors.Validation(result.Error!);
             }
 
             var response = new CreateLinkResponse(result.ShortUrl!, result.Code!);
