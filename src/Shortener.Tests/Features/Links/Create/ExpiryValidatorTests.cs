@@ -30,6 +30,7 @@ public sealed class ExpiryValidatorTests
 
     [Theory]
     [InlineData("2026-10-16T15:00:01+00:00")]
+    [InlineData("2026-10-16T15:00:01Z\n")]
     [InlineData("16/10/2026 15:00:01Z")]
     [InlineData("not-a-date")]
     public void TryParseRejectsValuesThatAreNotUtcIsoInstants(string value)

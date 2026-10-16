@@ -13,13 +13,14 @@ namespace Shortener.Tests.Features.Links.Create;
 
 public sealed class CreateLinkEndpointTests : IAsyncLifetime
 {
+    private static readonly DateTimeOffset NowUtc = new(2026, 10, 16, 15, 0, 0, TimeSpan.Zero);
     private readonly string _databasePath = Path.Combine(Path.GetTempPath(), $"shortener-{Guid.NewGuid():N}.db");
     private ShortenerApiFactory _factory = null!;
     private HttpClient _client = null!;
 
     public Task InitializeAsync()
     {
-        _factory = new ShortenerApiFactory(_databasePath);
+        _factory = new ShortenerApiFactory(_databasePath, new FrozenTimeProvider(NowUtc));
         _client = _factory.CreateClient(new WebApplicationFactoryClientOptions
         {
             BaseAddress = new Uri("https://short.example")
@@ -149,5 +150,23 @@ public sealed class CreateLinkEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task PostRejectsExpirationAtCurrentInstantWithProblemDetails()
+    {
+        var response = await _client.PostAsJsonAsync("/api/links", new
+        {
+            targetUrl = "https://example.com/expiring",
+            expiresAtUtc = NowUtc.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    private sealed class FrozenTimeProvider(DateTimeOffset nowUtc) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => nowUtc;
     }
 }

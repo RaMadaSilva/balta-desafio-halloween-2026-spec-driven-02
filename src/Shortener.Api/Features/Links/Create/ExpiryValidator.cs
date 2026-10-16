@@ -6,7 +6,7 @@ namespace Shortener.Api.Features.Links.Create;
 public static class ExpiryValidator
 {
     private static readonly Regex UtcIso8601Pattern =
-        new("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z$", RegexOptions.CultureInvariant);
+        new("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,7})?Z\\z", RegexOptions.CultureInvariant);
 
     public const string ErrorMessage = "A expiração tem de ser um instante UTC ISO 8601 terminado em Z e posterior ao momento actual.";
 
