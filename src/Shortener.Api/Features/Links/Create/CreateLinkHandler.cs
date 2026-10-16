@@ -18,6 +18,12 @@ public sealed class CreateLinkHandler(
             return new CreateLinkResult(null, null, error);
         }
 
+        var nowUtc = timeProvider.GetUtcNow();
+        if (!ExpiryValidator.TryParse(request.ExpiresAtUtc, nowUtc, out var expiresAtUtc, out var expiryError))
+        {
+            return new CreateLinkResult(null, null, expiryError);
+        }
+
         if (request.Code is { } customCode)
         {
             if (CustomShortCodeValidator.Validate(customCode) is { } codeError)
@@ -25,7 +31,7 @@ public sealed class CreateLinkHandler(
                 return new CreateLinkResult(null, null, codeError);
             }
 
-            var customLink = new Link(customCode, request.TargetUrl!, timeProvider.GetUtcNow());
+            var customLink = new Link(customCode, request.TargetUrl!, nowUtc, expiresAtUtc);
             if (!await repository.TryAddAsync(customLink, cancellationToken))
             {
                 return new CreateLinkResult(null, null, "O código personalizado já está em uso.");
@@ -37,7 +43,7 @@ public sealed class CreateLinkHandler(
         while (true)
         {
             var code = codeGenerator.Generate();
-            var link = new Link(code, request.TargetUrl!, timeProvider.GetUtcNow());
+            var link = new Link(code, request.TargetUrl!, nowUtc, expiresAtUtc);
 
             if (await repository.TryAddAsync(link, cancellationToken))
             {

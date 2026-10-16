@@ -38,6 +38,23 @@ public sealed class CreateLinkHandlerTests
         Assert.Empty(generator.GeneratedCodes);
     }
 
+    [Fact]
+    public async Task HandlePersistsValidatedExpiryAsUtc()
+    {
+        var repository = new ScriptedLinkRepository(true);
+        var generator = new SequenceCodeGenerator("Free123");
+        var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
+        var expiresAtUtc = DateTimeOffset.UtcNow.AddHours(1).ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+        var result = await handler.HandleAsync(
+            new CreateLinkRequest("https://example.com", ExpiresAtUtc: expiresAtUtc),
+            "https",
+            "short.example");
+
+        Assert.True(result.IsSuccess);
+        Assert.Equal(DateTimeOffset.Parse(expiresAtUtc).ToUniversalTime(), repository.AddedLinks.Single().ExpiresAtUtc);
+    }
+
     private sealed class SequenceCodeGenerator(params string[] codes) : IShortCodeGenerator
     {
         private readonly Queue<string> _codes = new(codes);
@@ -55,10 +72,12 @@ public sealed class CreateLinkHandlerTests
     {
         private readonly Queue<bool> _insertResults = new(insertResults);
         public List<string> AttemptedCodes { get; } = [];
+        public List<Link> AddedLinks { get; } = [];
 
         public Task<bool> TryAddAsync(Link link, CancellationToken cancellationToken = default)
         {
             AttemptedCodes.Add(link.Code);
+            AddedLinks.Add(link);
             return Task.FromResult(_insertResults.Dequeue());
         }
 

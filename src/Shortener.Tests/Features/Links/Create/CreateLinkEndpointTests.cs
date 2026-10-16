@@ -118,4 +118,19 @@ public sealed class CreateLinkEndpointTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
     }
+
+    [Theory]
+    [InlineData("2020-01-01T00:00:00Z")]
+    [InlineData("2000-01-01T00:00:00Z")]
+    public async Task PostRejectsPastExpirationWithProblemDetails(string expiresAtUtc)
+    {
+        var response = await _client.PostAsJsonAsync("/api/links", new
+        {
+            targetUrl = "https://example.com/expiring",
+            expiresAtUtc
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
 }
