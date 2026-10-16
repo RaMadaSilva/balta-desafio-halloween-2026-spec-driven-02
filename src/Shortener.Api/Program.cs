@@ -1,5 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Shortener.Api.Domain.Links;
+using Shortener.Api.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Shortener")));
+builder.Services.AddScoped<ILinkRepository, LinkRepository>();
+
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    await scope.ServiceProvider.GetRequiredService<AppDbContext>().Database.MigrateAsync();
+}
 
 app.Run();
 
