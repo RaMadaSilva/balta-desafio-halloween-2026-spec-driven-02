@@ -6,6 +6,8 @@ public sealed class CustomShortCodeValidatorTests
 {
     [Theory]
     [InlineData("Ab12")]
+    [InlineData("ABC1")]
+    [InlineData("abc1")]
     [InlineData("A1b2C3d4E5f6G7h8J9k1")]
     public void ValidateAcceptsCodesWithinLengthAndAlphabet(string code)
     {
