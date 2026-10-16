@@ -34,6 +34,7 @@ public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
         DateTimeOffset nowUtc,
         CancellationToken cancellationToken = default) =>
         await dbContext.Links
-            .Where(link => link.Code == code && (link.ExpiresAtUtc == null || link.ExpiresAtUtc > nowUtc))
-            .ExecuteUpdateAsync(update => update.SetProperty(link => link.AccessCount, link => link.AccessCount + 1), cancellationToken) == 1;
+            .Where(link => link.Code == code)
+            .Where(Link.IsActiveAt(nowUtc))
+            .ExecuteUpdateAsync(update => update.SetProperty(link => link.AccessCount, Link.NextAccessCount), cancellationToken) == 1;
 }

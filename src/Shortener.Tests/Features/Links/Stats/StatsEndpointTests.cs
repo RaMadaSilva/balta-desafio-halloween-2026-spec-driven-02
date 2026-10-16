@@ -76,12 +76,8 @@ public sealed class StatsEndpointTests : IAsyncLifetime
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         var link = new Link(code, "https://example.com/target", NowUtc.AddMinutes(-5), expiresAtUtc);
-        for (var index = 0; index < accessCount; index++)
-        {
-            link.RegisterAccess();
-        }
-
         db.Links.Add(link);
         await db.SaveChangesAsync();
+        await db.Database.ExecuteSqlInterpolatedAsync($"UPDATE Links SET AccessCount = {accessCount} WHERE Code = {code}");
     }
 }

@@ -1,7 +1,15 @@
+using System.Linq.Expressions;
+
 namespace Shortener.Api.Domain.Links;
 
 public sealed class Link
 {
+    public static Expression<Func<Link, bool>> IsActiveAt(DateTimeOffset nowUtc) =>
+        link => link.ExpiresAtUtc == null || link.ExpiresAtUtc > nowUtc;
+
+    public static Expression<Func<Link, long>> NextAccessCount =>
+        link => link.AccessCount + 1;
+
     private Link()
     {
     }
@@ -21,5 +29,4 @@ public sealed class Link
     public DateTimeOffset? ExpiresAtUtc { get; private set; }
     public long AccessCount { get; private set; }
 
-    public void RegisterAccess() => AccessCount++;
 }
