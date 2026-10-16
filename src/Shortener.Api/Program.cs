@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Shortener.Api.Domain.Links;
+using Shortener.Api.Features.Links.Create;
 using Shortener.Api.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Shortener")));
 builder.Services.AddScoped<ILinkRepository, LinkRepository>();
+builder.Services.AddSingleton<IShortCodeGenerator, ShortCodeGenerator>();
 
 var app = builder.Build();
 
