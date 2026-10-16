@@ -68,4 +68,54 @@ public sealed class CreateLinkEndpointTests : IAsyncLifetime
         using var problem = JsonDocument.Parse(body);
         Assert.Contains("URL de destino", problem.RootElement.GetProperty("detail").GetString());
     }
+
+    [Fact]
+    public async Task PostAcceptsCustomCodeAndTreatsCasingAsDistinct()
+    {
+        var upperResponse = await _client.PostAsJsonAsync("/api/links", new
+        {
+            targetUrl = "https://example.com/upper",
+            code = "ABC1"
+        });
+        var upper = await upperResponse.Content.ReadFromJsonAsync<CreateLinkResponse>();
+        var lowerResponse = await _client.PostAsJsonAsync("/api/links", new
+        {
+            targetUrl = "https://example.com/lower",
+            code = "abc1"
+        });
+        var lower = await lowerResponse.Content.ReadFromJsonAsync<CreateLinkResponse>();
+
+        Assert.Equal(HttpStatusCode.Created, upperResponse.StatusCode);
+        Assert.Equal("ABC1", upper?.Code);
+        Assert.Equal(HttpStatusCode.Created, lowerResponse.StatusCode);
+        Assert.Equal("abc1", lower?.Code);
+    }
+
+    [Fact]
+    public async Task PostRejectsDuplicateCustomCodeWithProblemDetails()
+    {
+        const string code = "Duplicate1";
+        await _client.PostAsJsonAsync("/api/links", new { targetUrl = "https://example.com/one", code });
+
+        var response = await _client.PostAsJsonAsync("/api/links", new { targetUrl = "https://example.com/two", code });
+        var body = await response.Content.ReadAsStringAsync();
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+        using var problem = JsonDocument.Parse(body);
+        Assert.Contains("já está", problem.RootElement.GetProperty("detail").GetString());
+    }
+
+    [Fact]
+    public async Task PostRejectsCustomCodeOutsideAllowedAlphabet()
+    {
+        var response = await _client.PostAsJsonAsync("/api/links", new
+        {
+            targetUrl = "https://example.com/invalid",
+            code = "Code0"
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
 }

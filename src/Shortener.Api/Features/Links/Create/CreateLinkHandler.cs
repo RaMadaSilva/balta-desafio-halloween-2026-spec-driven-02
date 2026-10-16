@@ -8,20 +8,36 @@ public sealed class CreateLinkHandler(
     TimeProvider timeProvider)
 {
     public async Task<CreateLinkResult> HandleAsync(
-        string? targetUrl,
+        CreateLinkRequest request,
         string scheme,
         string host,
         CancellationToken cancellationToken = default)
     {
-        if (TargetUrlValidator.Validate(targetUrl) is { } error)
+        if (TargetUrlValidator.Validate(request.TargetUrl) is { } error)
         {
             return new CreateLinkResult(null, null, error);
+        }
+
+        if (request.Code is { } customCode)
+        {
+            if (CustomShortCodeValidator.Validate(customCode) is { } codeError)
+            {
+                return new CreateLinkResult(null, null, codeError);
+            }
+
+            var customLink = new Link(customCode, request.TargetUrl!, timeProvider.GetUtcNow());
+            if (!await repository.TryAddAsync(customLink, cancellationToken))
+            {
+                return new CreateLinkResult(null, null, "O código personalizado já está em uso.");
+            }
+
+            return new CreateLinkResult(customCode, $"{scheme}://{host}/{customCode}", null);
         }
 
         while (true)
         {
             var code = codeGenerator.Generate();
-            var link = new Link(code, targetUrl!, timeProvider.GetUtcNow());
+            var link = new Link(code, request.TargetUrl!, timeProvider.GetUtcNow());
 
             if (await repository.TryAddAsync(link, cancellationToken))
             {

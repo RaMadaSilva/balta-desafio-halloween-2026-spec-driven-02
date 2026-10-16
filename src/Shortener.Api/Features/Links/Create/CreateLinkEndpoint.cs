@@ -13,7 +13,7 @@ public static class CreateLinkEndpoint
             CancellationToken cancellationToken) =>
         {
             var result = await handler.HandleAsync(
-                request.TargetUrl,
+                request,
                 httpRequest.Scheme,
                 httpRequest.Host.ToString(),
                 cancellationToken);

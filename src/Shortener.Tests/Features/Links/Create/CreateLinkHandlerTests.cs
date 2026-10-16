@@ -12,13 +12,30 @@ public sealed class CreateLinkHandlerTests
         var generator = new SequenceCodeGenerator("Taken12", "Free123");
         var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
 
-        var result = await handler.HandleAsync("https://example.com", "https", "short.example");
+        var result = await handler.HandleAsync(new CreateLinkRequest("https://example.com"), "https", "short.example");
 
         Assert.True(result.IsSuccess);
         Assert.Equal("Free123", result.Code);
         Assert.Equal("https://short.example/Free123", result.ShortUrl);
         Assert.Equal(new[] { "Taken12", "Free123" }, generator.GeneratedCodes);
         Assert.Equal(new[] { "Taken12", "Free123" }, repository.AttemptedCodes);
+    }
+
+    [Fact]
+    public async Task HandleRejectsCustomCodeWhenRepositoryReportsDuplicate()
+    {
+        var repository = new ScriptedLinkRepository(false);
+        var generator = new SequenceCodeGenerator();
+        var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
+
+        var result = await handler.HandleAsync(
+            new CreateLinkRequest("https://example.com", "Taken1"),
+            "https",
+            "short.example");
+
+        Assert.False(result.IsSuccess);
+        Assert.Contains("já está", result.Error);
+        Assert.Empty(generator.GeneratedCodes);
     }
 
     private sealed class SequenceCodeGenerator(params string[] codes) : IShortCodeGenerator
