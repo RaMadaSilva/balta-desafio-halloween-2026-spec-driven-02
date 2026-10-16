@@ -3,16 +3,16 @@ using Shortener.Api.Features.Links.Create;
 
 namespace Shortener.Tests.Features.Links.Create;
 
-public sealed class CreateLinkHandlerTests
+public sealed class CreateLinkServiceTests
 {
     [Fact]
-    public async Task HandleRetriesGeneratedCodeWhenRepositoryReportsCollision()
+    public async Task CreateRetriesGeneratedCodeWhenRepositoryReportsCollision()
     {
         var repository = new ScriptedLinkRepository(false, true);
         var generator = new SequenceCodeGenerator("Taken12", "Free123");
-        var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
+        var service = new CreateLinkService(repository, generator, TimeProvider.System);
 
-        var result = await handler.HandleAsync(new CreateLinkRequest("https://example.com"), "https", "short.example");
+        var result = await service.CreateAsync(new CreateLinkRequest("https://example.com"), "https", "short.example");
 
         Assert.True(result.IsSuccess);
         Assert.Equal("Free123", result.Code);
@@ -22,13 +22,13 @@ public sealed class CreateLinkHandlerTests
     }
 
     [Fact]
-    public async Task HandleRejectsCustomCodeWhenRepositoryReportsDuplicate()
+    public async Task CreateRejectsCustomCodeWhenRepositoryReportsDuplicate()
     {
         var repository = new ScriptedLinkRepository(false);
         var generator = new SequenceCodeGenerator();
-        var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
+        var service = new CreateLinkService(repository, generator, TimeProvider.System);
 
-        var result = await handler.HandleAsync(
+        var result = await service.CreateAsync(
             new CreateLinkRequest("https://example.com", "Taken1"),
             "https",
             "short.example");
@@ -39,14 +39,14 @@ public sealed class CreateLinkHandlerTests
     }
 
     [Fact]
-    public async Task HandlePersistsValidatedExpiryAsUtc()
+    public async Task CreatePersistsValidatedExpiryAsUtc()
     {
         var repository = new ScriptedLinkRepository(true);
         var generator = new SequenceCodeGenerator("Free123");
-        var handler = new CreateLinkHandler(repository, generator, TimeProvider.System);
+        var service = new CreateLinkService(repository, generator, TimeProvider.System);
         var expiresAtUtc = DateTimeOffset.UtcNow.AddHours(1).ToString("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
-        var result = await handler.HandleAsync(
+        var result = await service.CreateAsync(
             new CreateLinkRequest("https://example.com", ExpiresAtUtc: expiresAtUtc),
             "https",
             "short.example");

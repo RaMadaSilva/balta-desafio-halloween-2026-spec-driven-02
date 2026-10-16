@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ILinkRepository, LinkRepository>();
 builder.Services.AddSingleton<IShortCodeGenerator, ShortCodeGenerator>();
 builder.Services.AddSingleton(TimeProvider.System);
-builder.Services.AddScoped<CreateLinkHandler>();
+builder.Services.AddScoped<CreateLinkService>();
 builder.Services.AddScoped<RedirectLinkHandler>();
 builder.Services.AddScoped<GetLinkStatsHandler>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>

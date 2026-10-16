@@ -9,10 +9,10 @@ public static class CreateLinkEndpoint
         app.MapPost("/api/links", async (
             CreateLinkRequest request,
             HttpRequest httpRequest,
-            CreateLinkHandler handler,
+            CreateLinkService service,
             CancellationToken cancellationToken) =>
         {
-            var result = await handler.HandleAsync(
+            var result = await service.CreateAsync(
                 request,
                 httpRequest.Scheme,
                 httpRequest.Host.ToString(),

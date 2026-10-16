@@ -2,12 +2,12 @@ using Shortener.Api.Infrastructure.Persistence;
 
 namespace Shortener.Api.Features.Links.Create;
 
-public sealed class CreateLinkHandler(
+public sealed class CreateLinkService(
     ILinkRepository repository,
     IShortCodeGenerator codeGenerator,
     TimeProvider timeProvider)
 {
-    public async Task<CreateLinkResult> HandleAsync(
+    public async Task<CreateLinkResult> CreateAsync(
         CreateLinkRequest request,
         string scheme,
         string host,

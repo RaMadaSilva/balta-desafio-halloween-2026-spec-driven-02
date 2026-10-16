@@ -1,6 +1,6 @@
 # Tarefas
 
-Estado: T-01 a T-12 concluídas e testadas; T-13 a T-17 permanecem pendentes.
+Estado: T-01 a T-13 concluídas e testadas; T-14 a T-17 permanecem pendentes.
 
 | ID | Tarefa | Origem | Depende de | Concluída quando |
 |---|---|---|---|---|
@@ -23,7 +23,7 @@ T-01 a T-11 registam a implementação inicial já concluída. As tarefas seguin
 | ID | Tarefa | Origem | Depende de | Concluída quando |
 |---|---|---|---|---|
 | [x] T-12 | Isolar o modelo e o contrato de persistência | D-08, RF-08, RN-01, D-01, D-02 | — | LinkRecord, DbContext, migrações e contrato/implementação do repositório ficam em Infrastructure/Persistence; Domain/Links deixa de existir como modelo partilhado; esquema, dados, unicidade e actualização atómica permanecem iguais |
-| [ ] T-13 | Tornar Create autocontido | D-08, RF-01, RF-02, RF-03, RF-06, RN-02, RN-05, RN-06, RN-07 | T-12 | Endpoint, serviço de aplicação, request/response, geração, validadores e regras de criação ficam em Features/Links/Create; o slice só depende da persistência partilhada e mantém os mesmos resultados HTTP |
+| [x] T-13 | Tornar Create autocontido | D-08, RF-01, RF-02, RF-03, RF-06, RN-02, RN-05, RN-06, RN-07 | T-12 | Endpoint, serviço de aplicação, request/response, geração, validadores e regras de criação ficam em Features/Links/Create; o slice só depende da persistência partilhada e mantém os mesmos resultados HTTP |
 | [ ] T-14 | Tornar Redirect autocontido | D-08, RF-04, RF-05, RF-06, RN-03, RN-04, D-02 | T-12 | Endpoint, serviço de aplicação, contratos e decisão de validade ficam em Features/Links/Redirect; a persistência executa o incremento condicional atómico; testes mantêm 302, 404, 410 e ausência de contagem após expiração |
 | [ ] T-15 | Tornar Stats autocontido | D-08, RF-07, D-06 | T-12 | Endpoint, serviço de aplicação, contratos e regra de acesso público ficam em Features/Links/Stats; o slice consulta a persistência sem consumir tipos ou serviços de outros slices; respostas 200 e 404 mantêm-se |
 | [ ] T-16 | Uniformizar tratamento de erros e observabilidade | D-08, constituição | T-13, T-14, T-15 | Tratamento comum produz 400 ProblemDetails em português para erros de validação; logging e observabilidade comuns são configurados uma vez; regras e erros específicos continuam nos respectivos slices; não são adicionadas dependências sem justificação |
