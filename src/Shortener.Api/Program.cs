@@ -1,12 +1,14 @@
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Scalar.AspNetCore;
 using Shortener.Api.Features.Links.Create;
 using Shortener.Api.Features.Links.Redirect;
 using Shortener.Api.Features.Links.Stats;
 using Shortener.Api.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Shortener")));
 builder.Services.AddScoped<ILinkRepository, LinkRepository>();
@@ -34,6 +36,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 var app = builder.Build();
 app.UseForwardedHeaders();
+app.MapOpenApi();
+app.MapScalarApiReference(options => options
+    .WithTitle("Shortener API")
+    .DisableDefaultFonts());
 CreateLinkEndpoint.Map(app);
 RedirectLinkEndpoint.Map(app);
 GetLinkStatsEndpoint.Map(app);

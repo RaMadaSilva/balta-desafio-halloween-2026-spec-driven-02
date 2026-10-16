@@ -1,6 +1,6 @@
 # Tarefas
 
-Estado: T-01 a T-17 concluídas e testadas.
+Estado: T-01 a T-18 concluídas e testadas.
 
 | ID | Tarefa | Origem | Depende de | Concluída quando |
 |---|---|---|---|---|
@@ -28,3 +28,9 @@ T-01 a T-11 registam a implementação inicial já concluída. As tarefas seguin
 | [x] T-15 | Tornar Stats autocontido | D-08, RF-07, D-06 | T-12 | Endpoint, serviço de aplicação, contratos e regra de acesso público ficam em Features/Links/Stats; o slice consulta a persistência sem consumir tipos ou serviços de outros slices; respostas 200 e 404 mantêm-se |
 | [x] T-16 | Uniformizar tratamento de erros e observabilidade | D-08, constituição | T-13, T-14, T-15 | Infrastructure/Errors produz 400 ProblemDetails em português para erros de validação; logging permanece configurado uma única vez no host por WebApplication.CreateBuilder e appsettings*; regras e erros específicos continuam nos respectivos slices; não são adicionadas dependências sem justificação |
 | [x] T-17 | Verificar fronteiras e regressão funcional | D-08, RF-01 a RF-08, RN-01 a RN-07 | T-12, T-13, T-14, T-15, T-16 | Verificação confirma ausência de referências entre slices no código de produção, testes unitários por regra nos slices ou persistência, testes de integração por endpoint, persistência e concorrência; dotnet test src/Shortener.sln passa e os contratos HTTP permanecem iguais |
+
+## Documentação da API
+
+| ID | Tarefa | Origem | Depende de | Concluída quando |
+|---|---|---|---|---|
+| [x] T-18 | Publicar documentação OpenAPI/Scalar no arranque | RF-09, D-09, constituição | T-17 | Pacotes OpenAPI/Scalar estão justificados em `plan.md`; `/openapi/v1.json` e `/scalar` funcionam em todos os ambientes; os perfis de arranque abrem `/scalar`; testes de integração confirmam a documentação em Production, os endpoints no documento e o arranque do browser |

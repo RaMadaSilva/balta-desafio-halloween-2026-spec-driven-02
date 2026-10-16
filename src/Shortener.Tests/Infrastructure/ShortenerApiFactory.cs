@@ -3,13 +3,18 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 
 namespace Shortener.Tests.Infrastructure;
 
-public sealed class ShortenerApiFactory(string databasePath, TimeProvider? timeProvider = null) : WebApplicationFactory<Program>
+public sealed class ShortenerApiFactory(
+    string databasePath,
+    TimeProvider? timeProvider = null,
+    string environment = "Development") : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.UseEnvironment(environment);
         builder.ConfigureAppConfiguration((_, configuration) =>
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {

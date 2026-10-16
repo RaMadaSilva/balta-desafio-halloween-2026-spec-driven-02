@@ -3,29 +3,32 @@
 ## Contexto e âmbito
 Este plano implementa a especificação funcional do encurtador e respeita a constituição, que prevalece em qualquer conflito.
 
-A alteração actual redefine a organização interna para uma Vertical Slice Architecture estrita. Não altera os contratos HTTP, as regras RF/RN, os dados persistidos nem os resultados esperados pelos utilizadores.
+A implementação actual cumpre a Vertical Slice Architecture definida em D-08 e acrescenta a documentação OpenAPI/Scalar prevista em RF-09. Os contratos e comportamentos existentes RF-01 a RF-08 permanecem inalterados.
 
 ## Arquitectura alvo
 - Estilo: Vertical Slice Architecture. Cada slice representa um caso de uso autocontido e contém o endpoint, serviço de aplicação, contratos request/response e regras de domínio próprias. Os testes correspondentes ficam na pasta espelhada Shortener.Tests/Features/Links/<Slice>.
 - Os slices Create, Redirect e Stats não referenciam namespaces, tipos, serviços, contratos ou regras uns dos outros. O único ponto que pode conhecer e compor todos os slices é o composition root em Program.cs.
 - A lógica e os tipos específicos de um caso de uso ficam na pasta Features/Links/<Slice>. A estrutura de produção contém também Infrastructure/Persistence e Infrastructure/Errors. O logging usa os mecanismos integrados do host ASP.NET Core e não requer um módulo Infrastructure/Observability próprio enquanto não houver instrumentação adicional. Não há Domain/Links partilhado com entidades ou regras de negócio comuns aos slices.
-- Só se partilha o que é transversal: persistência, tratamento comum de erros e observabilidade. Não se criam serviços de aplicação, validadores, modelos de domínio, contratos HTTP ou helpers genéricos partilhados.
+- Entre slices só se partilha o que é transversal: persistência, tratamento comum de erros e observabilidade. A documentação OpenAPI/Scalar é configurada no host e não cria dependências ou tipos partilhados entre slices. Não se criam serviços de aplicação, validadores, modelos de domínio, contratos HTTP ou helpers genéricos partilhados.
 - Infrastructure/Persistence contém o modelo de persistência sem comportamento de domínio, DbContext, migrações e contrato/implementação do repositório. Esse limite pode ser usado pelos três slices e não expõe serviços de aplicação de outros slices.
 - Cada slice traduz os resultados de persistência nos seus próprios resultados e contratos. O modelo de persistência não é a resposta HTTP nem define regras de negócio.
 - Os endpoints fazem binding HTTP e delegam no serviço de aplicação da sua própria fatia; não acedem directamente ao DbContext e não implementam regras de negócio.
+- A documentação OpenAPI e a interface Scalar são transversais à API, registadas no composition root e mapeadas em todos os ambientes. Os perfis HTTP e HTTPS do projecto abrem o browser em `/scalar` quando o arranque pede abertura do browser.
 - O tratamento comum de erros fica num ponto partilhado da fronteira HTTP. Os erros específicos continuam a ser produzidos pelo slice correspondente e são traduzidos para o formato ProblemDetails exigido pela constituição.
 - O logging comum fica configurado uma única vez no host, através de WebApplication.CreateBuilder e das definições Logging em appsettings*. Os slices não configuram logging individualmente. Tracing, métricas ou instrumentação adicional só serão introduzidos quando houver requisito e justificação no plano.
 - Program.cs compõe endpoints, serviços dos slices e infraestrutura partilhada. Essa referência de composição não constitui uma dependência entre slices.
 - TimeProvider é uma abstracção da plataforma .NET injectada nos serviços que precisam de um instante controlado; não é um serviço de aplicação partilhado.
 - Não introduzir Mediator, dispatcher genérico, bus de mensagens ou dependências novas para implementar VSA.
 
-## Lacuna arquitectural a corrigir
-A implementação actual coloca Link e ILinkRepository em Domain/Links, e os três slices dependem desses tipos. Link também contém expressões de actividade e incremento do contador. A refatoração deve mover o modelo e o contrato de persistência para Infrastructure/Persistence, retirar desse modelo comportamento de domínio e deixar cada slice possuir as suas regras e contratos. A condição SQL atómica necessária para não contar acessos expirados continua na persistência como garantia de consistência dos dados.
+## Estado actual da arquitectura
+A implementação cumpre D-08: `LinkRecord` e `ILinkRepository` ficam em `Infrastructure/Persistence`; Create, Redirect e Stats mantêm serviços, contratos e regras nas respectivas pastas; e a persistência preserva o incremento condicional atómico. A verificação arquitectural testa a ausência de referências entre slices.
 
-A constituição não precisa de alteração: já exige que endpoints não acedam à base de dados directamente e que regras de negócio não vivam nos endpoints nem nos handlers HTTP. A especificação funcional também não muda, porque os requisitos e contratos observáveis permanecem iguais.
+A constituição permanece inalterada. O novo requisito RF-09 descreve a documentação da API sem alterar RF-01 a RF-08 ou as regras RN-01 a RN-07.
 
 ## Dependências e justificações
 - Microsoft.EntityFrameworkCore.Sqlite: persistência SQLite exigida por RF-08 e actualização atómica do contador exigida por RF-05.
+- Microsoft.AspNetCore.OpenApi 10.0.12: gera e serve o documento OpenAPI do Minimal API em .NET 10.
+- Scalar.AspNetCore 2.18.0: renderiza e serve a referência interactiva Scalar a partir do documento OpenAPI; o pacote é compatível com .NET 10.
 - Microsoft.AspNetCore.Mvc.Testing: testes HTTP de integração dos endpoints Minimal API.
 - Microsoft.NET.Test.Sdk, xunit e xunit.runner.visualstudio: execução dos testes xUnit exigidos pela constituição.
 - Não se adiciona EF Design nem dotnet-ef: as migrações continuam versionadas no código e aplicadas por Database.Migrate().
@@ -41,6 +44,7 @@ A constituição não precisa de alteração: já exige que endpoints não aceda
 - D-06: as estatísticas são públicas para qualquer pessoa que conheça o código, conforme RF-07; não existe chave de gestão nem autenticação.
 - D-07: todos os erros de validação, incluindo código personalizado duplicado, URL inválida e expiração passada, respondem 400 ProblemDetails em português, conforme a constituição.
 - D-08: cada slice possui endpoint, serviço de aplicação, request/response e regras de domínio próprios. Só persistência, tratamento comum de erros e observabilidade são partilhados; nenhum slice conhece outro.
+- D-09: o host regista OpenAPI e mapeia `/openapi/v1.json` e `/scalar` em todos os ambientes. A documentação é pública por requisito. Os perfis HTTP e HTTPS de `launchSettings.json` abrem o browser em `/scalar` automaticamente.
 
 ## Modelo de persistência
 O modelo LinkRecord representa apenas os dados persistidos: Id, Code, TargetUrl, CreatedAtUtc, ExpiresAtUtc e AccessCount. Fica em Infrastructure/Persistence, sem regras de domínio ou métodos de caso de uso. O esquema SQLite, a unicidade sensível a maiúsculas/minúsculas e as migrações existentes são preservados.
@@ -57,15 +61,22 @@ O modelo LinkRecord representa apenas os dados persistidos: Id, Code, TargetUrl,
   - Sem autenticação ou header de chave.
   - Código existente, mesmo expirado: 200 com { accessCount }.
   - Código inexistente: 404.
+- GET /openapi/v1.json
+  - Documento OpenAPI público, gerado a partir dos endpoints registados.
+- GET /scalar
+  - Referência interactiva pública que usa `/openapi/v1.json`.
+  - É mapeada em todos os ambientes; os perfis de arranque do projecto abrem esta rota no browser.
 
 ## Cobertura de qualidade
 - Cada regra de negócio RN-01 a RN-07 tem teste unitário no slice responsável ou teste unitário da configuração de persistência que a impõe.
 - Cada endpoint tem um teste de integração de caminho feliz: criação 201, redireccionamento 302 e estatísticas 200.
 - Testes de integração cobrem erros de validação em 400 ProblemDetails, redireccionamento expirado em 410, código inexistente em 404, contagem concorrente e persistência após reinício.
 - Uma verificação arquitectural confirma que nenhum código de produção num slice referencia namespaces de outro slice; apenas Program.cs pode compor todos os slices. Testes de integração podem chamar os contratos HTTP de vários slices sem referenciar os seus tipos internos.
+- Testes de integração confirmam o documento OpenAPI e a interface Scalar disponíveis em ambiente Production, que o documento inclui os endpoints existentes e que os perfis de arranque abrem `/scalar`.
 - A suite confirma que a refatoração não altera os contratos HTTP, dados existentes, migrações ou comportamento RF/RN.
 
 ## Riscos
 - A geração automática repete até inserir um código único; se todo o espaço estiver ocupado, não haverá código livre.
 - A origem de shortUrl depende da configuração de hosts permitidos e, quando aplicável, de cabeçalhos encaminhados por proxies confiáveis.
+- O documento OpenAPI e a interface Scalar são públicos em todos os ambientes; expõem os caminhos e contratos da API conforme RF-09.
 - Crescimento da tabela de links sem política de limpeza continua fora de âmbito.

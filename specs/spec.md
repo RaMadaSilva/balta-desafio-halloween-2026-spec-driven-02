@@ -11,6 +11,7 @@ link e acompanhe quantos acessos recebeu.
 ## Usuários
 - Criador do link: gera links curtos e acompanha os acessos
 - Visitante: clica no link curto e chega ao destino
+- Pessoa desenvolvedora: consulta e testa os endpoints da API através da documentação
 
 ## Histórias
 - Como criador, quero encurtar uma URL para partilhar um link menor
@@ -33,6 +34,9 @@ link e acompanhe quantos acessos recebeu.
 - RF-07: qualquer pessoa que conheça o código pode consultar o total de acessos
 - RF-08: os links e os seus dados são persistidos para sobreviverem ao reinício
   da aplicação
+- RF-09: a API publica o documento OpenAPI em `/openapi/v1.json` e a interface
+  Scalar em `/scalar` em todos os ambientes; os perfis de arranque do projecto
+  abrem automaticamente o browser na interface Scalar
 
 ## Regras de negócio
 - RN-01: o código do link é único em todo o sistema, com comparação sensível a
@@ -65,6 +69,8 @@ link e acompanhe quantos acessos recebeu.
 - Acesso no instante de expiração ou depois dele: responder `410` e não contar
   acesso
 - Link expirado: as estatísticas continuam disponíveis enquanto o código existir
+- Documentação da API: `/openapi/v1.json` e `/scalar` estão disponíveis sem
+  autenticação em qualquer ambiente
 
 ## Fora de escopo
 - Cadastro e login de usuários
@@ -92,3 +98,6 @@ link e acompanhe quantos acessos recebeu.
 - Qualquer pessoa que conheça o código pode consultar o total, mesmo após a
   expiração do link
 - Após reiniciar a aplicação, os links persistidos continuam a funcionar
+- O documento OpenAPI descreve os endpoints da API, a interface Scalar permite
+  consultar e testar esses endpoints, e os perfis de arranque abrem `/scalar`
+  automaticamente no browser
