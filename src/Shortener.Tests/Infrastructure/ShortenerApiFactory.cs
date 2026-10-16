@@ -14,7 +14,7 @@ public sealed class ShortenerApiFactory(string databasePath, TimeProvider? timeP
             configuration.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 ["ConnectionStrings:Shortener"] = $"Data Source={databasePath}",
-                ["AllowedHosts"] = "short.example"
+                ["AllowedHosts"] = "short.example;forwarded.example"
             }));
 
         builder.ConfigureServices(services =>

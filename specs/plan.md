@@ -49,8 +49,9 @@ do projeto. Em qualquer conflito, a constituição prevalece.
   em `400 ProblemDetails`, por ser erro de validação segundo a constituição, e
   colisão automática gera outro código até a inserção ter sucesso
 - D-05: `shortUrl` é construído com o esquema e o host externos do pedido de
-  criação, seguidos de `/{code}`, conforme RF-01; cabe ao deployment configurar
-  hosts permitidos e confiar em cabeçalhos de proxy apenas de proxies conhecidos
+  criação, seguidos de `/{code}`, conforme RF-01; o middleware processa
+  `X-Forwarded-Proto` e `X-Forwarded-Host` apenas de IPs configurados em
+  `KnownProxies`, enquanto `AllowedHosts` restringe os hosts aceites
 - D-06: as estatísticas são públicas para qualquer pessoa que conheça o código,
   conforme RF-07; não existe chave de gestão nem autenticação
 - D-07: todos os erros de validação, incluindo código personalizado duplicado,

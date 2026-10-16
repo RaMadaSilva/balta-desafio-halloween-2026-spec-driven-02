@@ -58,6 +58,23 @@ public sealed class CreateLinkEndpointTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task PostUsesForwardedSchemeAndHostFromTrustedProxy()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "/api/links")
+        {
+            Content = JsonContent.Create(new { targetUrl = "https://example.com/forwarded" })
+        };
+        request.Headers.TryAddWithoutValidation("X-Forwarded-Proto", "https");
+        request.Headers.TryAddWithoutValidation("X-Forwarded-Host", "forwarded.example");
+
+        var response = await _client.SendAsync(request);
+        var result = await response.Content.ReadFromJsonAsync<CreateLinkResponse>();
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        Assert.Equal($"https://forwarded.example/{result?.Code}", result?.ShortUrl);
+    }
+
+    [Fact]
     public async Task PostReturnsProblemDetailsForInvalidUrl()
     {
         var response = await _client.PostAsJsonAsync("/api/links", new { targetUrl = "ftp://example.com/file" });

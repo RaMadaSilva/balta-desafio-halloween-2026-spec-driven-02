@@ -1,3 +1,5 @@
+using System.Net;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Shortener.Api.Domain.Links;
 using Shortener.Api.Features.Links.Create;
@@ -14,8 +16,25 @@ builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<CreateLinkHandler>();
 builder.Services.AddScoped<RedirectLinkHandler>();
 builder.Services.AddScoped<GetLinkStatsHandler>();
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto;
+    options.AllowedHosts = (builder.Configuration["AllowedHosts"] ?? string.Empty)
+        .Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+    foreach (var proxy in builder.Configuration.GetSection("KnownProxies").GetChildren().Select(item => item.Value))
+    {
+        if (!IPAddress.TryParse(proxy, out var address))
+        {
+            throw new InvalidOperationException($"O endereço configurado em KnownProxies não é válido: {proxy}");
+        }
+
+        options.KnownProxies.Add(address);
+    }
+});
 
 var app = builder.Build();
+app.UseForwardedHeaders();
 CreateLinkEndpoint.Map(app);
 RedirectLinkEndpoint.Map(app);
 GetLinkStatsEndpoint.Map(app);
