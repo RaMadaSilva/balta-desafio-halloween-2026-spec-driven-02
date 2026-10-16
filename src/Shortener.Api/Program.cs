@@ -14,7 +14,7 @@ builder.Services.AddSingleton<IShortCodeGenerator, ShortCodeGenerator>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<CreateLinkService>();
 builder.Services.AddScoped<RedirectLinkService>();
-builder.Services.AddScoped<GetLinkStatsHandler>();
+builder.Services.AddScoped<GetLinkStatsService>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {
     options.ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedProto;
