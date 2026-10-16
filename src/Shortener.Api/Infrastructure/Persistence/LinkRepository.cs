@@ -1,3 +1,4 @@
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Shortener.Api.Domain.Links;
 
@@ -5,10 +6,21 @@ namespace Shortener.Api.Infrastructure.Persistence;
 
 public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
 {
-    public async Task AddAsync(Link link, CancellationToken cancellationToken = default)
+    private const int UniqueConstraintErrorCode = 2067;
+
+    public async Task<bool> TryAddAsync(Link link, CancellationToken cancellationToken = default)
     {
         dbContext.Links.Add(link);
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return true;
+        }
+        catch (DbUpdateException exception) when (exception.GetBaseException() is SqliteException { SqliteExtendedErrorCode: UniqueConstraintErrorCode })
+        {
+            dbContext.Entry(link).State = EntityState.Detached;
+            return false;
+        }
     }
 
     public Task<Link?> GetByCodeAsync(string code, CancellationToken cancellationToken = default) =>

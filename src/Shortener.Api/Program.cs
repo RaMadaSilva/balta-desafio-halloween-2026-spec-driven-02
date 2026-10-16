@@ -8,8 +8,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("Shortener")));
 builder.Services.AddScoped<ILinkRepository, LinkRepository>();
 builder.Services.AddSingleton<IShortCodeGenerator, ShortCodeGenerator>();
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddScoped<CreateLinkHandler>();
 
 var app = builder.Build();
+CreateLinkEndpoint.Map(app);
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
