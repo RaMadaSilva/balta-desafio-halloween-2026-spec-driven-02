@@ -1,6 +1,6 @@
 # Tarefas
 
-Estado: todas as tarefas T-01 a T-11 foram concluídas e testadas; cada tarefa tem um commit próprio no histórico Git.
+Estado: T-01 a T-11 concluídas e testadas; T-12 a T-17 definem a refatoração arquitectural pendente.
 
 | ID | Tarefa | Origem | Depende de | Concluída quando |
 |---|---|---|---|---|
@@ -15,3 +15,16 @@ Estado: todas as tarefas T-01 a T-11 foram concluídas e testadas; cada tarefa t
 | [x] T-09 | Contar acessos na fatia `Redirect` | RF-05, RN-03, RN-04, D-02 | T-08 | Handler delega a actualização atómica no repositório; testes unitários verificam que o contador só aumenta; teste concorrente confirma que cada acesso válido, repetido ou automatizado, é contado sem perdas e que acessos expirados não contam |
 | [x] T-10 | Implementar a fatia pública `Stats` | RF-07, D-06 | T-09 | Endpoint delega no handler de aplicação; sem chave ou autenticação, teste de integração confirma `200` com `accessCount` correcto para link válido e expirado, e `404` para código inexistente |
 | [x] T-11 | Verificar persistência entre reinícios | RF-08, D-01 | T-02, T-05 | Teste de integração cria um link, reinicia a aplicação e reabre o banco SQLite, confirmando que o link e os seus dados continuam disponíveis |
+
+## Refactor da arquitectura
+
+T-01 a T-11 registam a implementação inicial já concluída. As tarefas seguintes descrevem a refatoração pendente para cumprir D-08; os requisitos RF/RN e os contratos HTTP mantêm-se.
+
+| ID | Tarefa | Origem | Depende de | Concluída quando |
+|---|---|---|---|---|
+| [ ] T-12 | Isolar o modelo e o contrato de persistência | D-08, RF-08, RN-01, D-01, D-02 | — | LinkRecord, DbContext, migrações e contrato/implementação do repositório ficam em Infrastructure/Persistence; Domain/Links deixa de existir como modelo partilhado; esquema, dados, unicidade e actualização atómica permanecem iguais |
+| [ ] T-13 | Tornar Create autocontido | D-08, RF-01, RF-02, RF-03, RF-06, RN-02, RN-05, RN-06, RN-07 | T-12 | Endpoint, serviço de aplicação, request/response, geração, validadores e regras de criação ficam em Features/Links/Create; o slice só depende da persistência partilhada e mantém os mesmos resultados HTTP |
+| [ ] T-14 | Tornar Redirect autocontido | D-08, RF-04, RF-05, RF-06, RN-03, RN-04, D-02 | T-12 | Endpoint, serviço de aplicação, contratos e decisão de validade ficam em Features/Links/Redirect; a persistência executa o incremento condicional atómico; testes mantêm 302, 404, 410 e ausência de contagem após expiração |
+| [ ] T-15 | Tornar Stats autocontido | D-08, RF-07, D-06 | T-12 | Endpoint, serviço de aplicação, contratos e regra de acesso público ficam em Features/Links/Stats; o slice consulta a persistência sem consumir tipos ou serviços de outros slices; respostas 200 e 404 mantêm-se |
+| [ ] T-16 | Uniformizar tratamento de erros e observabilidade | D-08, constituição | T-13, T-14, T-15 | Tratamento comum produz 400 ProblemDetails em português para erros de validação; logging e observabilidade comuns são configurados uma vez; regras e erros específicos continuam nos respectivos slices; não são adicionadas dependências sem justificação |
+| [ ] T-17 | Verificar fronteiras e regressão funcional | D-08, RF-01 a RF-08, RN-01 a RN-07 | T-12, T-13, T-14, T-15, T-16 | Verificação confirma ausência de referências entre slices no código de produção, testes unitários por regra nos slices ou persistência, testes de integração por endpoint, persistência e concorrência; dotnet test src/Shortener.sln passa e os contratos HTTP permanecem iguais |
