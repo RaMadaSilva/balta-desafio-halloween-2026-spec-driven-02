@@ -86,5 +86,10 @@ public sealed class CreateLinkHandlerTests
 
         public Task<bool> CodeExistsAsync(string code, CancellationToken cancellationToken = default) =>
             Task.FromResult(false);
+
+        public Task<bool> TryIncrementAccessCountAsync(
+            string code,
+            DateTimeOffset nowUtc,
+            CancellationToken cancellationToken = default) => Task.FromResult(false);
     }
 }

@@ -28,4 +28,12 @@ public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
 
     public Task<bool> CodeExistsAsync(string code, CancellationToken cancellationToken = default) =>
         dbContext.Links.AnyAsync(link => link.Code == code, cancellationToken);
+
+    public async Task<bool> TryIncrementAccessCountAsync(
+        string code,
+        DateTimeOffset nowUtc,
+        CancellationToken cancellationToken = default) =>
+        await dbContext.Links
+            .Where(link => link.Code == code && (link.ExpiresAtUtc == null || link.ExpiresAtUtc > nowUtc))
+            .ExecuteUpdateAsync(update => update.SetProperty(link => link.AccessCount, link => link.AccessCount + 1), cancellationToken) == 1;
 }

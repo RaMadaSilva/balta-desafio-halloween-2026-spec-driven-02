@@ -47,6 +47,7 @@ public sealed class RedirectEndpointTests : IAsyncLifetime
 
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
         Assert.Equal("https://example.com/target", response.Headers.Location?.ToString());
+        Assert.Equal(1, await GetAccessCount("Active1"));
     }
 
     [Fact]
@@ -65,6 +66,7 @@ public sealed class RedirectEndpointTests : IAsyncLifetime
         var response = await _client.GetAsync("/Expired");
 
         Assert.Equal(HttpStatusCode.Gone, response.StatusCode);
+        Assert.Equal(0, await GetAccessCount("Expired"));
     }
 
     [Fact]
@@ -77,12 +79,38 @@ public sealed class RedirectEndpointTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Found, response.StatusCode);
     }
 
+    [Fact]
+    public async Task GetCountsEveryConcurrentAndRepeatedAccess()
+    {
+        const int concurrentAccesses = 32;
+        await SeedLink("Counted1", null);
+
+        var responses = await Task.WhenAll(Enumerable.Range(0, concurrentAccesses)
+            .Select(_ => _client.GetAsync("/Counted1")));
+        foreach (var response in responses)
+        {
+            Assert.Equal(HttpStatusCode.Found, response.StatusCode);
+        }
+
+        Assert.Equal(concurrentAccesses, await GetAccessCount("Counted1"));
+        await _client.GetAsync("/Counted1");
+        await _client.GetAsync("/Counted1");
+        Assert.Equal(concurrentAccesses + 2, await GetAccessCount("Counted1"));
+    }
+
     private async Task SeedLink(string code, DateTimeOffset? expiresAtUtc)
     {
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         db.Links.Add(new Link(code, "https://example.com/target", NowUtc.AddMinutes(-1), expiresAtUtc));
         await db.SaveChangesAsync();
+    }
+
+    private async Task<long> GetAccessCount(string code)
+    {
+        using var scope = _factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        return await db.Links.Where(link => link.Code == code).Select(link => link.AccessCount).SingleAsync();
     }
 
     private sealed class FrozenTimeProvider(DateTimeOffset nowUtc) : TimeProvider

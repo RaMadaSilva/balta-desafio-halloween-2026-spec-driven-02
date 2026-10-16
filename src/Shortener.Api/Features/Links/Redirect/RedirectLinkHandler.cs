@@ -6,17 +6,19 @@ public sealed class RedirectLinkHandler(ILinkRepository repository, TimeProvider
 {
     public async Task<RedirectLinkResult> HandleAsync(string code, CancellationToken cancellationToken = default)
     {
+        var nowUtc = timeProvider.GetUtcNow();
+        if (await repository.TryIncrementAccessCountAsync(code, nowUtc, cancellationToken))
+        {
+            var validLink = await repository.GetByCodeAsync(code, cancellationToken);
+            return validLink is null
+                ? new RedirectLinkResult(RedirectStatus.NotFound)
+                : new RedirectLinkResult(RedirectStatus.Found, validLink.TargetUrl);
+        }
+
         var link = await repository.GetByCodeAsync(code, cancellationToken);
-        if (link is null)
-        {
-            return new RedirectLinkResult(RedirectStatus.NotFound);
-        }
+        return link is null
+            ? new RedirectLinkResult(RedirectStatus.NotFound)
+            : new RedirectLinkResult(RedirectStatus.Expired);
 
-        if (link.ExpiresAtUtc is { } expiresAtUtc && timeProvider.GetUtcNow() >= expiresAtUtc)
-        {
-            return new RedirectLinkResult(RedirectStatus.Expired);
-        }
-
-        return new RedirectLinkResult(RedirectStatus.Found, link.TargetUrl);
     }
 }
