@@ -13,7 +13,7 @@ builder.Services.AddScoped<ILinkRepository, LinkRepository>();
 builder.Services.AddSingleton<IShortCodeGenerator, ShortCodeGenerator>();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddScoped<CreateLinkService>();
-builder.Services.AddScoped<RedirectLinkHandler>();
+builder.Services.AddScoped<RedirectLinkService>();
 builder.Services.AddScoped<GetLinkStatsHandler>();
 builder.Services.Configure<ForwardedHeadersOptions>(options =>
 {

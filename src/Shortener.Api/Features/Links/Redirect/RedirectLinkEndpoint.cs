@@ -6,9 +6,9 @@ public static class RedirectLinkEndpoint
 {
     public static void Map(WebApplication app)
     {
-        app.MapGet("/{code}", async (string code, RedirectLinkHandler handler, CancellationToken cancellationToken) =>
+        app.MapGet("/{code}", async (string code, RedirectLinkService service, CancellationToken cancellationToken) =>
         {
-            var result = await handler.HandleAsync(code, cancellationToken);
+            var result = await service.RedirectAsync(code, cancellationToken);
 
             return result.Status switch
             {
