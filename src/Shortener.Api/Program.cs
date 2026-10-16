@@ -1,7 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using Shortener.Api.Domain.Links;
 using Shortener.Api.Features.Links.Create;
 using Shortener.Api.Features.Links.Redirect;
 using Shortener.Api.Features.Links.Stats;

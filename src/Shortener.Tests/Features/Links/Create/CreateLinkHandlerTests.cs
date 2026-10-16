@@ -1,4 +1,4 @@
-using Shortener.Api.Domain.Links;
+using Shortener.Api.Infrastructure.Persistence;
 using Shortener.Api.Features.Links.Create;
 
 namespace Shortener.Tests.Features.Links.Create;
@@ -72,17 +72,17 @@ public sealed class CreateLinkHandlerTests
     {
         private readonly Queue<bool> _insertResults = new(insertResults);
         public List<string> AttemptedCodes { get; } = [];
-        public List<Link> AddedLinks { get; } = [];
+        public List<LinkRecord> AddedLinks { get; } = [];
 
-        public Task<bool> TryAddAsync(Link link, CancellationToken cancellationToken = default)
+        public Task<bool> TryAddAsync(LinkRecord link, CancellationToken cancellationToken = default)
         {
             AttemptedCodes.Add(link.Code);
             AddedLinks.Add(link);
             return Task.FromResult(_insertResults.Dequeue());
         }
 
-        public Task<Link?> GetByCodeAsync(string code, CancellationToken cancellationToken = default) =>
-            Task.FromResult<Link?>(null);
+        public Task<LinkRecord?> GetByCodeAsync(string code, CancellationToken cancellationToken = default) =>
+            Task.FromResult<LinkRecord?>(null);
 
         public Task<bool> CodeExistsAsync(string code, CancellationToken cancellationToken = default) =>
             Task.FromResult(false);

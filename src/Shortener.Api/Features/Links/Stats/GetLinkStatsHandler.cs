@@ -1,4 +1,4 @@
-using Shortener.Api.Domain.Links;
+using Shortener.Api.Infrastructure.Persistence;
 
 namespace Shortener.Api.Features.Links.Stats;
 

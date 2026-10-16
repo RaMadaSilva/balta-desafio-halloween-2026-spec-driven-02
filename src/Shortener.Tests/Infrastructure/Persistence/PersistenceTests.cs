@@ -1,6 +1,5 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Shortener.Api.Domain.Links;
 using Shortener.Api.Infrastructure.Persistence;
 
 namespace Shortener.Tests.Infrastructure.Persistence;
@@ -19,8 +18,8 @@ public sealed class PersistenceTests
         await using var db = new AppDbContext(options);
         await db.Database.MigrateAsync();
         db.Links.AddRange(
-            new Link("ABC", "https://example.com/one", DateTimeOffset.UtcNow),
-            new Link("abc", "https://example.com/two", DateTimeOffset.UtcNow));
+            new LinkRecord("ABC", "https://example.com/one", DateTimeOffset.UtcNow),
+            new LinkRecord("abc", "https://example.com/two", DateTimeOffset.UtcNow));
 
         await db.SaveChangesAsync();
 
@@ -38,9 +37,9 @@ public sealed class PersistenceTests
 
         await using var db = new AppDbContext(options);
         await db.Database.MigrateAsync();
-        db.Links.Add(new Link("Same", "https://example.com/one", DateTimeOffset.UtcNow));
+        db.Links.Add(new LinkRecord("Same", "https://example.com/one", DateTimeOffset.UtcNow));
         await db.SaveChangesAsync();
-        db.Links.Add(new Link("Same", "https://example.com/two", DateTimeOffset.UtcNow));
+        db.Links.Add(new LinkRecord("Same", "https://example.com/two", DateTimeOffset.UtcNow));
 
         await Assert.ThrowsAsync<DbUpdateException>(() => db.SaveChangesAsync());
     }
@@ -58,8 +57,8 @@ public sealed class PersistenceTests
         await db.Database.MigrateAsync();
         var nowUtc = new DateTimeOffset(2026, 10, 16, 15, 0, 0, TimeSpan.Zero);
         db.Links.AddRange(
-            new Link("Valid01", "https://example.com/valid", nowUtc.AddMinutes(-1)),
-            new Link("Expired", "https://example.com/expired", nowUtc.AddMinutes(-1), nowUtc));
+            new LinkRecord("Valid01", "https://example.com/valid", nowUtc.AddMinutes(-1)),
+            new LinkRecord("Expired", "https://example.com/expired", nowUtc.AddMinutes(-1), nowUtc));
         await db.SaveChangesAsync();
         var repository = new LinkRepository(db);
 

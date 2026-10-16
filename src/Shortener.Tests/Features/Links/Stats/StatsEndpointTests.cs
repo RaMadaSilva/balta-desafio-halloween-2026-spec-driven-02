@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shortener.Api.Domain.Links;
-using Shortener.Api.Features.Links.Stats;
 using Shortener.Api.Infrastructure.Persistence;
+using Shortener.Api.Features.Links.Stats;
 using Shortener.Tests.Infrastructure;
 
 namespace Shortener.Tests.Features.Links.Stats;
@@ -75,7 +74,7 @@ public sealed class StatsEndpointTests : IAsyncLifetime
     {
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        var link = new Link(code, "https://example.com/target", NowUtc.AddMinutes(-5), expiresAtUtc);
+        var link = new LinkRecord(code, "https://example.com/target", NowUtc.AddMinutes(-5), expiresAtUtc);
         db.Links.Add(link);
         await db.SaveChangesAsync();
         await db.Database.ExecuteSqlInterpolatedAsync($"UPDATE Links SET AccessCount = {accessCount} WHERE Code = {code}");

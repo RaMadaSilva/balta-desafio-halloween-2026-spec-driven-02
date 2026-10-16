@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Shortener.Api.Domain.Links;
 using Shortener.Api.Infrastructure.Persistence;
 
 namespace Shortener.Tests.Infrastructure.Persistence;
@@ -17,7 +16,7 @@ public sealed class AppDbContextModelTests
 
         using var db = new AppDbContext(options);
         var code = db.GetService<IDesignTimeModel>().Model
-            .FindEntityType(typeof(Link))!.FindProperty(nameof(Link.Code))!;
+            .FindEntityType(typeof(LinkRecord))!.FindProperty(nameof(LinkRecord.Code))!;
 
         Assert.Equal("BINARY", code.GetCollation());
     }

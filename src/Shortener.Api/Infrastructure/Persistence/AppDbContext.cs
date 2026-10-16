@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Shortener.Api.Domain.Links;
 
 namespace Shortener.Api.Infrastructure.Persistence;
 
@@ -9,11 +8,11 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     private static readonly ValueConverter<DateTimeOffset, long> UtcTicksConverter =
         new(value => value.UtcDateTime.Ticks, ticks => new DateTimeOffset(ticks, TimeSpan.Zero));
 
-    public DbSet<Link> Links => Set<Link>();
+    public DbSet<LinkRecord> Links => Set<LinkRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        var link = modelBuilder.Entity<Link>();
+        var link = modelBuilder.Entity<LinkRecord>();
 
         link.ToTable("Links");
         link.HasKey(item => item.Id);

@@ -1,6 +1,5 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Shortener.Api.Domain.Links;
 
 namespace Shortener.Api.Infrastructure.Persistence;
 
@@ -8,7 +7,7 @@ public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
 {
     private const int UniqueConstraintErrorCode = 2067;
 
-    public async Task<bool> TryAddAsync(Link link, CancellationToken cancellationToken = default)
+    public async Task<bool> TryAddAsync(LinkRecord link, CancellationToken cancellationToken = default)
     {
         dbContext.Links.Add(link);
         try
@@ -23,7 +22,7 @@ public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
         }
     }
 
-    public Task<Link?> GetByCodeAsync(string code, CancellationToken cancellationToken = default) =>
+    public Task<LinkRecord?> GetByCodeAsync(string code, CancellationToken cancellationToken = default) =>
         dbContext.Links.SingleOrDefaultAsync(link => link.Code == code, cancellationToken);
 
     public Task<bool> CodeExistsAsync(string code, CancellationToken cancellationToken = default) =>
@@ -35,6 +34,6 @@ public sealed class LinkRepository(AppDbContext dbContext) : ILinkRepository
         CancellationToken cancellationToken = default) =>
         await dbContext.Links
             .Where(link => link.Code == code)
-            .Where(Link.IsActiveAt(nowUtc))
-            .ExecuteUpdateAsync(update => update.SetProperty(link => link.AccessCount, Link.NextAccessCount), cancellationToken) == 1;
+            .Where(link => link.ExpiresAtUtc == null || link.ExpiresAtUtc > nowUtc)
+            .ExecuteUpdateAsync(update => update.SetProperty(link => link.AccessCount, link => link.AccessCount + 1), cancellationToken) == 1;
 }

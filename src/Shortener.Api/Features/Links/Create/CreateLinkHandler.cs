@@ -1,4 +1,4 @@
-using Shortener.Api.Domain.Links;
+using Shortener.Api.Infrastructure.Persistence;
 
 namespace Shortener.Api.Features.Links.Create;
 
@@ -31,7 +31,7 @@ public sealed class CreateLinkHandler(
                 return new CreateLinkResult(null, null, codeError);
             }
 
-            var customLink = new Link(customCode, request.TargetUrl!, nowUtc, expiresAtUtc);
+            var customLink = new LinkRecord(customCode, request.TargetUrl!, nowUtc, expiresAtUtc);
             if (!await repository.TryAddAsync(customLink, cancellationToken))
             {
                 return new CreateLinkResult(null, null, "O código personalizado já está em uso.");
@@ -43,7 +43,7 @@ public sealed class CreateLinkHandler(
         while (true)
         {
             var code = codeGenerator.Generate();
-            var link = new Link(code, request.TargetUrl!, nowUtc, expiresAtUtc);
+            var link = new LinkRecord(code, request.TargetUrl!, nowUtc, expiresAtUtc);
 
             if (await repository.TryAddAsync(link, cancellationToken))
             {

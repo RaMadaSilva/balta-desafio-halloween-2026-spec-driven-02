@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shortener.Api.Domain.Links;
 using Shortener.Api.Infrastructure.Persistence;
 using Shortener.Tests.Infrastructure;
 
@@ -102,7 +101,7 @@ public sealed class RedirectEndpointTests : IAsyncLifetime
     {
         using var scope = _factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        db.Links.Add(new Link(code, "https://example.com/target", NowUtc.AddMinutes(-1), expiresAtUtc));
+        db.Links.Add(new LinkRecord(code, "https://example.com/target", NowUtc.AddMinutes(-1), expiresAtUtc));
         await db.SaveChangesAsync();
     }
 
