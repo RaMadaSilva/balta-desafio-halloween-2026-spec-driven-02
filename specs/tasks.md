@@ -1,6 +1,6 @@
 # Tarefas
 
-Estado: T-01 a T-16 concluídas e testadas; T-17 permanece pendente.
+Estado: T-01 a T-17 concluídas e testadas.
 
 | ID | Tarefa | Origem | Depende de | Concluída quando |
 |---|---|---|---|---|
@@ -27,4 +27,4 @@ T-01 a T-11 registam a implementação inicial já concluída. As tarefas seguin
 | [x] T-14 | Tornar Redirect autocontido | D-08, RF-04, RF-05, RF-06, RN-03, RN-04, D-02 | T-12 | Endpoint, serviço de aplicação, contratos e decisão de validade ficam em Features/Links/Redirect; a persistência executa o incremento condicional atómico; testes mantêm 302, 404, 410 e ausência de contagem após expiração |
 | [x] T-15 | Tornar Stats autocontido | D-08, RF-07, D-06 | T-12 | Endpoint, serviço de aplicação, contratos e regra de acesso público ficam em Features/Links/Stats; o slice consulta a persistência sem consumir tipos ou serviços de outros slices; respostas 200 e 404 mantêm-se |
 | [x] T-16 | Uniformizar tratamento de erros e observabilidade | D-08, constituição | T-13, T-14, T-15 | Infrastructure/Errors produz 400 ProblemDetails em português para erros de validação; logging permanece configurado uma única vez no host por WebApplication.CreateBuilder e appsettings*; regras e erros específicos continuam nos respectivos slices; não são adicionadas dependências sem justificação |
-| [ ] T-17 | Verificar fronteiras e regressão funcional | D-08, RF-01 a RF-08, RN-01 a RN-07 | T-12, T-13, T-14, T-15, T-16 | Verificação confirma ausência de referências entre slices no código de produção, testes unitários por regra nos slices ou persistência, testes de integração por endpoint, persistência e concorrência; dotnet test src/Shortener.sln passa e os contratos HTTP permanecem iguais |
+| [x] T-17 | Verificar fronteiras e regressão funcional | D-08, RF-01 a RF-08, RN-01 a RN-07 | T-12, T-13, T-14, T-15, T-16 | Verificação confirma ausência de referências entre slices no código de produção, testes unitários por regra nos slices ou persistência, testes de integração por endpoint, persistência e concorrência; dotnet test src/Shortener.sln passa e os contratos HTTP permanecem iguais |
