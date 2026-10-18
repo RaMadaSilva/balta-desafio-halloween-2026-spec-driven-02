@@ -1,0 +1,143 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\targeturlvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\targeturlvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\shortcoderules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\shortcoderules.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\shortcodegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\shortcodegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\ishortcodegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\ishortcodegenerator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\expiryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\expiryvalidator.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\createlinkrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\createlinkrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|c:\\users\\raul da silva\\documents\\mega\\jornadadev\\baltaio\\desafio_haloween\\desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\shortener.api\\features\\links\\create\\createlinkendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{6902E754-4FB5-49AE-AB78-470D31D5EFD3}|Shortener.Api\\Shortener.Api.csproj|solutionrelative:shortener.api\\features\\links\\create\\createlinkendpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:533079123:0:{83107a3e-496a-485e-b455-16ddb978e55e}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TargetUrlValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\TargetUrlValidator.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\TargetUrlValidator.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\TargetUrlValidator.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\TargetUrlValidator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:41.417Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ShortCodeRules.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ShortCodeRules.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\ShortCodeRules.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ShortCodeRules.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\ShortCodeRules.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:39.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ShortCodeGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ShortCodeGenerator.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\ShortCodeGenerator.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ShortCodeGenerator.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\ShortCodeGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:38.538Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "IShortCodeGenerator.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\IShortCodeGenerator.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\IShortCodeGenerator.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\IShortCodeGenerator.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\IShortCodeGenerator.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:35.122Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ExpiryValidator.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ExpiryValidator.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\ExpiryValidator.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\ExpiryValidator.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\ExpiryValidator.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:31.392Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "CreateLinkRequest.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\CreateLinkRequest.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\CreateLinkRequest.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\CreateLinkRequest.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\CreateLinkRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:26.249Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CreateLinkEndpoint.cs",
+              "DocumentMoniker": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\CreateLinkEndpoint.cs",
+              "RelativeDocumentMoniker": "Shortener.Api\\Features\\Links\\Create\\CreateLinkEndpoint.cs",
+              "ToolTip": "C:\\Users\\Raul da Silva\\Documents\\MEGA\\JornadaDev\\BaltaIo\\Desafio_Haloween\\Desafios\\balta-desafio-halloween-2026-spec-driven-02\\src\\Shortener.Api\\Features\\Links\\Create\\CreateLinkEndpoint.cs",
+              "RelativeToolTip": "Shortener.Api\\Features\\Links\\Create\\CreateLinkEndpoint.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-18T11:26:21.668Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
